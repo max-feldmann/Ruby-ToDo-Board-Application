@@ -49,6 +49,10 @@ class List
     end
 
     def swap(index_1, index_2)
+        # if both indeces are valid, items at indices are swapped
+        # placeholder stores first item, first item is set to second item
+        # second item is set to placeholder(first item)
+        # returns true
         if valid_index?(index_1) && valid_index?(index_2)
             placeholder = items[index_1]
             items[index_1] = items[index_2]
@@ -67,6 +71,7 @@ class List
     end
 
     def priority
+        # returns first item of items array
         return @items[0]
     end
 
@@ -105,6 +110,7 @@ class List
     end
 
     def print_priority
+        # prints first item of items array
         self.print_full_item(0)
     end
 
@@ -112,6 +118,8 @@ class List
 
         return false if !self.valid_index?(index)
 
+        # uses swap method
+        # swaps as long as there are swaps (amount) left item and item with an index of 1 fewer (aka item above) are swapped
         while amount > 0 && index != 0
             swap(index, index - 1)
             index -= 1
@@ -125,6 +133,7 @@ class List
         
         return false if !self.valid_index?(index)
 
+        # same logic as in "up" only that index of item below (index +1) is used for swap
         while amount > 0 && index != self.size - 1
             swap(index, index + 1)
             index += 1
@@ -147,6 +156,7 @@ class List
     end
 
     def purge
+        # models original @items arr (same memory position) to only include those with the status "done"
         @items.select! {|item| !item.done}
     end
 end
