@@ -18,12 +18,15 @@ class List
         @items = []
     end
 
+    # setter for a new label
     def label=(new_label)
         @label = new_label
     end
 
+    # method initialises a todo as a new instance of item and shovels it to items-arr
     def add_item(title, deadline, *description)
         
+        # if description is not to function, new-description is set to an empty array.
         if description.empty?
             new_descr = ""
         else
@@ -40,6 +43,7 @@ class List
     end
 
     def valid_index?(index)
+        # Index must be 0 or greater and smaller than the list´s size - 1 (index starts at 0)
         return false if index < 0 || index > self.size - 1
         true
     end

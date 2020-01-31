@@ -9,6 +9,10 @@ class TodoBoard
     end
 
 
+    # Case is used for getting commands from user
+    # variables are set up so that the command from the user is always first,then comes the target list and then an arbitrary amount of arguments
+    # if a command is entered for that no case exists, method ends and returns true (is fired again by "run" then)
+    # if a command is entered for that a case exists, the commands under that case are fired
     def get_command
 
         print "\nWhat do you want to do? ( type <show-commands> to see option) "
@@ -98,32 +102,42 @@ class TodoBoard
         true
     end
 
+    # get_command return true in the end
+    # with "run" get_command is repeatedly called
+    # if user enters "quit" as command, false is returned
     def run
         while true
             return if !get_command
         end
     end
 
-    def self.todo_configurator(target)      # User is lead through todo-creation in 3 steps
+    # 3 steps take user through todo creation.
+    def self.todo_configurator(target)
         args = []
 
+        # first a name is asked
         print "\nEnter a name for your Todo!"
         puts
 
         label = gets.chomp
         args << label
 
+        # second deadline is asked. Dealine calls helper function deadline_asker to get deadline.
+        # This way always a correct deadline is returned and program does not break.
         print "\nCool, now enter a Deadline for your Todo! (Has to be YYYY-MM-DD)"
         puts
 
         deadline = self.deadline_asker
         args << deadline
 
+        # Third a description is asked
+        # Item.new always calls for description as an arg.
+        # To make it optional, if no arg is given, empty string is shoveled
         print "\nAlmost there, now enter description (this is optional, you can leave it empty)!"
         puts
         description = gets.chomp
 
-            if description.empty?         # if description given by user is empty, empty string "" is shoveled to args.
+            if description.empty?
                 args << ""
             else
                 args << description
@@ -132,6 +146,9 @@ class TodoBoard
         return args
     end
 
+    # until a deadline is entered, that returns true when passed to Item.valid_date? (aka is a correctly formatted deadline)
+    # the loop runs and repeatedly asks the user to fill in a deadline
+    # if correct deadline is entered, deadline is returned
     def self.deadline_asker
         correct_format = false
         while correct_format == false
