@@ -141,7 +141,7 @@ class TodoBoard
                 correct_cormat = true
                 return deadline
             else
-                puts "The date was not formatted correctly. It has to be YYYY-MM-DD (with the -)"
+                puts "The date was not formatted correctly. Try again! \nHint: It has to be YYYY-MM-DD (with the -)"
             end
         end
     end
