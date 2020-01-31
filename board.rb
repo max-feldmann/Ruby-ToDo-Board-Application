@@ -44,7 +44,7 @@ class TodoBoard
                     v.print
                 end
             when 'make-todo'
-                @lists[target].add_item(*TodoBoard.todo_configurator)        # make-todo calls self.todo_configurator to get arguments for add_item
+                @lists[target].add_item(*TodoBoard.todo_configurator(target))        # make-todo calls self.todo_configurator to get arguments for add_item
             when 'remove'
                 @lists[target].remove_item(*args.first.to_i)
             when 'quit'
@@ -104,7 +104,7 @@ class TodoBoard
         end
     end
 
-    def self.todo_configurator      # User is lead through todo-creation in 3 steps
+    def self.todo_configurator(target)      # User is lead through todo-creation in 3 steps
         args = []
 
         print "\nEnter a name for your Todo!"
@@ -115,7 +115,8 @@ class TodoBoard
 
         print "\nCool, now enter a Deadline for your Todo! (Has to be YYYY-MM-DD)"
         puts
-        deadline = gets.chomp
+
+        deadline = self.deadline_asker
         args << deadline
 
         print "\nAlmost there, now enter description (this is optional, you can leave it empty)!"
@@ -129,6 +130,20 @@ class TodoBoard
             end
 
         return args
+    end
+
+    def self.deadline_asker
+        correct_format = false
+        while correct_format == false
+            deadline = gets.chomp
+
+            if Item.valid_date?(deadline)
+                correct_cormat = true
+                return deadline
+            else
+                puts "The date was not formatted correctly. It has to be YYYY-MM-DD (with the -)"
+            end
+        end
     end
 end
 
