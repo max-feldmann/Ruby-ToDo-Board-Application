@@ -2,7 +2,6 @@ require './list.rb'
 
 
 class TodoBoard
-
     def initialize
         @lists = {}
         #@list = List.new(label)
@@ -10,16 +9,18 @@ class TodoBoard
 
     def start
           puts "Welcome to Awesome-O Todo-Master 3000
-        \n Do you want to start working?
-        \n [y] to Start
-        \n [n] to Quit
-        \n "
+                \n Do you want to start working?
+                \n [y] to Start
+                \n [n] to Quit
+                \n "
 
         what = gets.chomp
         if what == "y" || what == "Y"
             self.run(true)
         elsif what == "n" || what == "N"
             self.run(false)
+        else
+            self.start
         end
 
         # self.run(what_do?) if what_do?
@@ -36,48 +37,82 @@ class TodoBoard
                \n( type <show-commands> to see your options)
                \n"
 
-        cmd, target, *args = gets.chomp.split(' ')
+        cmd, target, *args = gets.chomp.downcase.split(' ')
 
         
         case cmd
             when 'up'
                 @lists[target].up(*args.map(&:to_i))
+
             when 'down'
                 @lists[target].down(*args.map(&:to_i))
+
             when 'swap'
                 @lists[target].swap(*args.map(&:to_i))
+
             when 'sort'
                 @lists[target].sort_by_date!
+
             when 'priority'
-                @lists[target].print_priority
+                if @lists[target].items.empty?
+                    puts "\nList #{target} does not contain any Todos yet! You can add some next.
+                          \nWould you like to do that now?
+                          \n[y] to create new Todo in #{target}
+                          \n[n] to go back home.
+                          \n"
+                    what = gets.chomp.downcase
+
+                    if what == "y"
+                        @lists[target].add_item(*TodoBoard.todo_configurator(target))
+                        puts "\nYay, you created a new Todo! \n"
+                        @lists[target].print_priority
+                    else
+                        return true
+                    end
+
+                else
+                    @lists[target].print_priority
+                end
+
             when 'print'
                 if args.empty?
                     @lists[target].print
                 else
                     @lists[target].print_full_item(*args.first.to_i)
                 end
+
             when 'make-list'
                 @lists[target] = List.new(target.to_s)
+                puts "\nList '#{target}' was successfully created!\n"
+
             when 'ls'
                 @lists.each_key do |key|
                     puts key
                 end
+
             when 'showall'
                 @lists.each do |k, v|
                     v.print
                 end
+
             when 'make-todo'
                 @lists[target].add_item(*TodoBoard.todo_configurator(target))        # make-todo calls self.todo_configurator to get arguments for add_item
+                puts "\nYay, you created a new Todo! \n"
+
             when 'remove'
                 @lists[target].remove_item(*args.first.to_i)
+
             when 'quit'
                 return false
+
             when 'check'
                 @lists[target].toggle_item(*args.first.to_i)
+
             when 'purge'
                 @lists[target].purge
-            when 'show-commands' || '<show-commands>'
-                puts
+
+            when 'show-commands' || '<show-commands>' || 'show commands'
+                puts "--COMMANDS--"
                 p "You can type the following commands, followed by the parameters (all seperated by " " and withouth the <>)"
                 puts "---"
                 puts "CREATE LISTS AND TODO-ITEMS"
@@ -167,7 +202,6 @@ class TodoBoard
             else
                 args << description
             end
-
         return args
     end
 
