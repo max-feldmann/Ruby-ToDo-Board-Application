@@ -7,6 +7,10 @@ class TodoBoard
         #@list = List.new(label)
     end
 
+    # start welcomes the user and asks him if he wants to boot the program
+    # if user answered affirmative, run is called with "true"
+    # if user answered negative, run is called with "false"
+    # if command is not recognized, start is called again
     def start
           puts "Welcome to Awesome-O Todo-Master 3000
                 \n Do you want to start working?
@@ -14,16 +18,14 @@ class TodoBoard
                 \n [n] to Quit
                 \n "
 
-        what = gets.chomp
-        if what == "y" || what == "Y"
+        what = gets.chomp.downcase
+        if what == "y"
             self.run(true)
-        elsif what == "n" || what == "N"
+        elsif what == "n"
             self.run(false)
         else
             self.start
         end
-
-        # self.run(what_do?) if what_do?
     end
 
 
@@ -159,12 +161,6 @@ class TodoBoard
     # get_command return true in the end
     # with "run" get_command is repeatedly called
     # if user enters "quit" as command, false is returned
-#     def run
-#         while true
-#             return if !get_command
-#         end
-#     end
-
     def run(set)
         while set
             return if !get_command
