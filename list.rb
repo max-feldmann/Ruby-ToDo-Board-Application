@@ -95,7 +95,7 @@ class List
     end
 
     def print_full_item(index)
-        status = :TODO
+        status = :OPEN
         if items[index].done
             status = :DONE
         end
@@ -152,6 +152,7 @@ class List
     end
 
     def remove_item(index)
+        # deletes item at given index
         @items.delete_at(index)
     end
 

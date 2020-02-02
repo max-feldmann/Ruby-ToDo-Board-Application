@@ -8,6 +8,23 @@ class TodoBoard
         #@list = List.new(label)
     end
 
+    def start
+          puts "Welcome to Awesome-O Todo-Master 3000
+        \n Do you want to start working?
+        \n [y] to Start
+        \n [n] to Quit
+        \n "
+
+        what = gets.chomp
+        if what == "y" || what == "Y"
+            self.run(true)
+        elsif what == "n" || what == "N"
+            self.run(false)
+        end
+
+        # self.run(what_do?) if what_do?
+    end
+
 
     # Case is used for getting commands from user
     # variables are set up so that the command from the user is always first,then comes the target list and then an arbitrary amount of arguments
@@ -15,7 +32,9 @@ class TodoBoard
     # if a command is entered for that a case exists, the commands under that case are fired
     def get_command
 
-        print "\nWhat do you want to do? ( type <show-commands> to see option) "
+        print "\nType a Command to get to work (e.g. make-list to start a new list of todo´s)
+               \n( type <show-commands> to see your options)
+               \n"
 
         cmd, target, *args = gets.chomp.split(' ')
 
@@ -105,8 +124,14 @@ class TodoBoard
     # get_command return true in the end
     # with "run" get_command is repeatedly called
     # if user enters "quit" as command, false is returned
-    def run
-        while true
+#     def run
+#         while true
+#             return if !get_command
+#         end
+#     end
+
+    def run(set)
+        while set
             return if !get_command
         end
     end
@@ -148,7 +173,7 @@ class TodoBoard
 
     # until a deadline is entered, that returns true when passed to Item.valid_date? (aka is a correctly formatted deadline)
     # the loop runs and repeatedly asks the user to fill in a deadline
-    # if correct deadline is entered, deadline is returned
+    # if a correct deadline is entered, deadline is returned
     def self.deadline_asker
         correct_format = false
         while correct_format == false
@@ -162,7 +187,9 @@ class TodoBoard
             end
         end
     end
+
+
 end
 
 
-TodoBoard.new.run
+TodoBoard.new.start
