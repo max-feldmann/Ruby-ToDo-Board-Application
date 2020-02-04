@@ -2,9 +2,11 @@ require './list.rb'
 
 
 class TodoBoard
+
+    attr_reader :lists
+
     def initialize
         @lists = {}
-        #@list = List.new(label)
     end
 
     # start welcomes the user and asks him if he wants to boot the program
@@ -12,22 +14,21 @@ class TodoBoard
     # if user answered negative, run is called with "false"
     # if command is not recognized, start is called again
     def start
-          puts "Welcome to Awesome-O Todo-Master 3000
+          puts "\nWelcome to Awesome-O Todo-Master 3000
                 \n Do you want to start working?
                 \n [y] to Start
                 \n [n] to Quit
                 \n "
 
-        what = gets.chomp.downcase
-        if what == "y"
+        answer = gets.chomp.downcase
+        if answer == "y"
             self.run(true)
-        elsif what == "n"
+        elsif answer == "n"
             self.run(false)
         else
             self.start
         end
     end
-
 
     # Case is used for getting commands from user
     # variables are set up so that the command from the user is always first,then comes the target list and then an arbitrary amount of arguments
@@ -97,12 +98,20 @@ class TodoBoard
                     v.print
                 end
 
+            when 'all-priorities'
+                @lists.each do |k, v|
+                    v.print_priority
+                end
+
             when 'make-todo'
                 @lists[target].add_item(*TodoBoard.todo_configurator(target))        # make-todo calls self.todo_configurator to get arguments for add_item
                 puts "\nYay, you created a new Todo! \n"
 
             when 'remove'
                 @lists[target].remove_item(*args.first.to_i)
+
+            when 'delete-list'
+                @lists.delete(target)
 
             when 'quit'
                 return false
@@ -132,6 +141,8 @@ class TodoBoard
                 p "=> (shows all lists)"
                 p "priority <list name>"
                 p "=> (shows top item on list)"
+                p "all-priorities"
+                p "=> (displays all priority items from all lists)"
                 p "---"
                 p "MANAGE LISTS AND TODO ITEMS"
                 p "sort <list name>"
@@ -217,8 +228,6 @@ class TodoBoard
             end
         end
     end
-
-
 end
 
 
