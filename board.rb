@@ -108,7 +108,7 @@ class TodoBoard
                 puts "\nYay, you created a new Todo! \n"
 
             when 'remove'
-                @lists[target].remove_item(*args.first.to_i)
+                self.remove_todo(*args.first.to_i, target)
 
             when 'delete-list'
                 @lists.delete(target)
@@ -227,6 +227,29 @@ class TodoBoard
                 puts "The date was not formatted correctly. Try again! \nHint: It has to be YYYY-MM-DD (with the -)"
             end
         end
+    end
+
+    def remove_todo(index, target)
+        @lists[target].remove_item(index)
+
+                if @lists[target].items.empty?
+                    puts "\n List #{target} is now empty. Are you done with it now?
+                          \n [y] to delete
+                          \n [n] to keep the list"
+                          answer = gets.chomp.downcase
+
+                          if answer == "y"
+                            @lists.delete(target)
+                            puts "\nCongrats, you finished all Todos on #{target}. The list has been removed!"
+                            return true
+                          else
+                            return true
+                          end
+                end
+
+                puts "\nTodo has been removed!"
+                return true
+
     end
 end
 
